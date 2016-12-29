@@ -13,7 +13,7 @@ public class Stickman extends JComponent{
     private int headRadius, bodySize, armSize, legSize;
     private int xLocation = 200, yLocation = 136;
     private int leftHandX, leftHandY, rightHandX, rightHandY;
-    private iWeapon weapon = new Axe();
+    private iWeapon weapon = new Sword();
     
     public Stickman(int headRadius, int bodySize, int armSize, int legSize) {
         this.headRadius = headRadius;
