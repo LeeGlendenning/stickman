@@ -19,7 +19,7 @@ public class Fist implements iWeapon{
     
     @Override
     public void draw(Graphics g, int x, int y) {
-        System.out.println("No weapon");
+        //System.out.println("No weapon");
     }
     
 }

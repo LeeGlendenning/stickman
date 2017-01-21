@@ -2,33 +2,58 @@ package stickman;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 
-public class Stickman extends JComponent{
+public class Stickman extends JComponent implements KeyListener{
     
     private static JFrame frame;
     
     private int headRadius, bodySize, armSize, legSize;
     private int xLocation = 200, yLocation = 136;
     private int leftHandX, leftHandY, rightHandX, rightHandY;
-    private iWeapon weapon = new Sword();
+    
+    private ArrayList<iWeapon> weapons = new ArrayList();
+    private int currentWeaponIndex;
     
     public Stickman(int headRadius, int bodySize, int armSize, int legSize) {
+        System.out.println("Creating stickman");
+        
+        // prepare stick man
         this.headRadius = headRadius;
         this.bodySize = bodySize;
         this.armSize = armSize;
         this.legSize = legSize;
         
-        System.out.println("Creating stickman");
+        // prepare weapons
+        this.weapons.add(new Fist());
+        this.weapons.add(new Axe());
+        this.weapons.add(new Sword());
         
+        // equip weapon
+        this.currentWeaponIndex = 0;
+        
+        System.out.println("Adding listeners");
+        registerListeners();
     }
+    
+    private void registerListeners() {
+        this.setFocusable(true);
+        addKeyListener(this);
+    }
+    
     
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println("repainting");
+        //System.out.println("repainting");
         
         drawHead(g);
         drawBody(g);
@@ -103,7 +128,42 @@ public class Stickman extends JComponent{
     }
     
     private void drawWeapon(Graphics g) {
-        this.weapon.draw(g, Math.min(this.leftHandX, this.rightHandX), Math.max(this.leftHandY, this.rightHandY));
+        this.weapons.get(currentWeaponIndex).draw(g, Math.min(this.leftHandX, this.rightHandX), Math.max(this.leftHandY, this.rightHandY));
+    }
+    
+    private void cycleWeapon() {
+        if (this.currentWeaponIndex != weapons.size() - 1) {
+            this.currentWeaponIndex ++;
+        } else {
+            this.currentWeaponIndex = 0;
+        }
+        
+        repaint();
+    }
+    
+    private static int moveProgress = 0;
+    private static final int MOVE_DONE = 5;
+    
+    private void move(int dir) {
+        
+        int delay = 10; //milliseconds
+        ActionListener taskPerformer = new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (moveProgress < MOVE_DONE) {
+                    moveProgress ++;
+                    xLocation += dir;
+                    repaint();
+                } else {
+                    // kill timer
+                    moveProgress = 0;
+                    ((Timer)evt.getSource()).stop();
+                }
+            }
+
+        };
+        new Timer(delay, taskPerformer).start();
     }
     
     /***********************
@@ -141,14 +201,68 @@ public class Stickman extends JComponent{
     
     
     
+    /***********************
+     *     Key Listener    *
+     ***********************/
+    
+    ArrayList<Integer> keysDown = new ArrayList();
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
+        int key = e.getKeyCode();
+        //System.out.println(key);
+        switch(key) {
+            case 81:
+                cycleWeapon();
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
+            keysDown.remove(e.getKeyCode());
+        
+    }
+    
+     @Override
+    public void keyPressed(KeyEvent e) {
+        //qSystem.out.println("keyPressed");
+        int key = e.getKeyCode();
+        
+        
+        switch(key) {
+            case 81:
+                if (!keysDown.contains(e.getKeyCode())) {
+                    keysDown.add(key);
+                }
+                cycleWeapon();
+                break;
+            case KeyEvent.VK_LEFT:
+                if (!keysDown.contains(e.getKeyCode())) {
+                    keysDown.add(key);
+                }
+                keysDown.add(key);
+                move(-1);
+                break;
+            case KeyEvent.VK_RIGHT:
+                if (!keysDown.contains(e.getKeyCode())) {
+                    keysDown.add(key);
+                }
+                keysDown.add(key);
+                move(1);
+                break;
+        }
+    }
+    
     
     
     public static void main(String[] args) {
         
         int headRadius = 25;
-        int bodySize = 50;
+        int bodySize = 60;
         int armSize = 50;
-        int legSize = 50;
+        int legSize = 40;
         
         Stickman george = new Stickman(headRadius, bodySize, armSize, legSize);
         
@@ -179,7 +293,10 @@ public class Stickman extends JComponent{
         frame.setPreferredSize(new Dimension(600, 400));
         frame.pack();
         frame.setLocationRelativeTo(null);
+        //frame.setLocationByPlatform(true);
         frame.setVisible(true);
     }
+
+    
     
 }
