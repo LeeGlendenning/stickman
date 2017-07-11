@@ -11,15 +11,15 @@ import java.awt.Graphics;
  *
  * @author theboss
  */
-public class Fist implements iWeapon{
+public class Bow implements iWeapon{
     
-    public Fist() {
+    public Bow() {
         
     }
-    
+
     @Override
     public void draw(Graphics g, int x, int y) {
-        //System.out.println("No weapon");
+        
     }
     
     @Override

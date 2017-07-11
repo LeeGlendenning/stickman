@@ -48,4 +48,8 @@ public class Axe implements iWeapon{
         g.drawLine(bladeX, bladeY1, bladeX, bladeY2);
     }
     
+    @Override
+    public void attackAnimation(Graphics g) {
+        
+    }
 }

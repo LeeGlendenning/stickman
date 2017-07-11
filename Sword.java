@@ -49,4 +49,9 @@ public class Sword implements iWeapon{
         
     }
     
+    @Override
+    public void attackAnimation(Graphics g) {
+        
+    }
+    
 }

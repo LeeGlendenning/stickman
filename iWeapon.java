@@ -21,4 +21,5 @@ public interface iWeapon {
      */
     void draw(Graphics g, int x, int y);
     
+    void attackAnimation(Graphics g);
 }
