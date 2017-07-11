@@ -25,8 +25,11 @@ public class Bow implements iWeapon{
     @Override
     public void draw(Graphics g, int handX, int handY) {
         
+        handY = handY - 7; // use upper hand instead of lower hand y position
         int bowY1 = handY - bowHeight;
         int bowY2 = handY + bowHeight - HAND_Y_OFFSET;
+        
+        /***** Draw Bow *****/
         
         // bowstring
         int stringX = handX - HAND_X_OFFSET;
@@ -36,7 +39,32 @@ public class Bow implements iWeapon{
         int gripArcSize = 50;
         g.drawArc(stringX - gripArcSize/2, bowY1, gripArcSize, bowY2 - bowY1, 90, -180);
         
+        /*******************/
         
+        drawArrow(g, stringX, gripArcSize, handY);
+    }
+    
+    private void drawArrow(Graphics g, int stringX, int gripArcSize, int handY) {
+        // arrow shaft
+        int arrowShaftX1 = stringX - 5;
+        int arrowShaftX2 = stringX + gripArcSize/2 + 5;
+        g.drawLine(arrowShaftX1, handY, arrowShaftX2, handY);
+        
+        // arrow tip
+        int arrowTipSize = 2;
+        g.drawLine(arrowShaftX2, handY - arrowTipSize, arrowShaftX2, handY + arrowTipSize); // vertical part
+        g.drawLine(arrowShaftX2, handY - arrowTipSize, arrowShaftX2 + arrowTipSize, handY); // diagonal top part
+        g.drawLine(arrowShaftX2, handY + arrowTipSize, arrowShaftX2 + arrowTipSize, handY); // diagonal bottom part
+        
+        // arrow flight
+        int flightSize = 2;
+        int flight2Offset = 2;
+        // part 1
+        g.drawLine(arrowShaftX1, handY, arrowShaftX1 - flightSize, handY - flightSize); // diagonal top part
+        g.drawLine(arrowShaftX1, handY, arrowShaftX1 - flightSize, handY + flightSize); // diagonal bottom part
+        // part 2
+        g.drawLine(arrowShaftX1 + flight2Offset, handY, arrowShaftX1 + flight2Offset - flightSize, handY - flightSize); // diagonal top part
+        g.drawLine(arrowShaftX1 + flight2Offset, handY, arrowShaftX1 + flight2Offset - flightSize, handY + flightSize); // diagonal bottom part
         
     }
     
