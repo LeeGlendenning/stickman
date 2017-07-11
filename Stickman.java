@@ -221,7 +221,7 @@ public class Stickman extends JComponent implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
         
-            keysDown.remove(e.getKeyCode());
+        keysDown.remove(new Integer(e.getKeyCode()));
         
     }
     
@@ -232,7 +232,7 @@ public class Stickman extends JComponent implements KeyListener{
         
         
         switch(key) {
-            case 81:
+            case 81: // Q
                 if (!keysDown.contains(e.getKeyCode())) {
                     keysDown.add(key);
                 }
