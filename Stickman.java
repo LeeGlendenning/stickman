@@ -36,6 +36,7 @@ public class Stickman extends JComponent implements KeyListener{
         this.weapons.add(new Fist());
         this.weapons.add(new Axe());
         this.weapons.add(new Sword());
+        this.weapons.add(new Bow());
         
         // equip weapon
         this.currentWeaponIndex = 0;
